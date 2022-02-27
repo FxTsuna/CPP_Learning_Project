@@ -78,7 +78,24 @@ void timer(const int step)
         item->move();
     }
     glutPostRedisplay();
-    glutTimerFunc(1000u / ticks_per_sec, timer, step + 1);
+    if (!stop)
+        glutTimerFunc(1000u / ticks_per_sec, timer, step + 1);
+}
+
+void increase_framerate()
+{
+    ticks_per_sec *= 1.2f;
+}
+
+void decrease_framerate()
+{
+    if (ticks_per_sec > 1)
+        ticks_per_sec *= 0.8f;
+}
+
+void stop_framerate() {
+    stop = !stop;
+    glutTimerFunc(1000u / ticks_per_sec, timer, 0);
 }
 
 void init_gl(int argc, char** argv, const char* title)
