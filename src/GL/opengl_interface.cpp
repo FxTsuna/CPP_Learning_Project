@@ -73,24 +73,34 @@ void display(void)
 
 void timer(const int step)
 {
-    for (auto& item : move_queue)
+    for (auto item = move_queue.begin(); item != move_queue.end();)
     {
-        item->move();
+        auto it = *item;
+        it->move();
+        if ((*item)->delete_aircraft())
+        {
+            item = move_queue.erase(item);
+            delete it;
+        } else {
+            item++;
+        }
     }
     glutPostRedisplay();
     if (!stop)
+    {
         glutTimerFunc(1000u / ticks_per_sec, timer, step + 1);
+    }
 }
 
 void increase_framerate()
 {
-    ticks_per_sec *= 1.2f;
+    ticks_per_sec *= 1.3f;
 }
 
 void decrease_framerate()
 {
     if (ticks_per_sec > 1)
-        ticks_per_sec *= 0.8f;
+        ticks_per_sec *= 0.7f;
 }
 
 void stop_framerate() {

@@ -49,6 +49,7 @@ void Aircraft::arrive_at_terminal()
     // we arrived at a terminal, so start servicing
     control.arrived_at_terminal(*this);
     is_at_terminal = true;
+    landed_atleast_once = true;
 }
 
 // deploy and retract landing gear depending on next waypoints
@@ -136,6 +137,15 @@ void Aircraft::move()
         // update the z-value of the displayable structure
         GL::Displayable::z = pos.x() + pos.y();
     }
+}
+
+bool Aircraft::delete_aircraft()
+{
+    if (landed_atleast_once && !landing_gear_deployed)
+    {
+        return true;
+    }
+    return false;
 }
 
 void Aircraft::display() const
