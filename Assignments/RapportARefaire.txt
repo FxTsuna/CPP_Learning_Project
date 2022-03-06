@@ -1,0 +1,70 @@
+A. Executions
+Il faut appuyer sur C pour ajouter un avion
+X ou Q pour quitter le programme
+F permet de mettre la fenêtre en plein écran
+
+- L'avion apparaît, il atteri, se fait entretenir puis dès que c'est fini il repart pour redécolle.
+Dans la console on nous annonce chaque étape, c'est-à-dire le nom de l'avion qui atteri, le début de sa maintenant, la fin et le redécollage.
+
+-Nous n'avons pas plus de 3 places de maintenances dans l'aéroport donc uniquement 3 avions à la fois peut atterir, les autres continuent a voler autour de l'aéroport.
+
+B. Analyse de code
+
+La classe Aircraft représente un avion et lorsqu'on crée un objet aircraft, elle permet de créer un avion
+
+    const std::string& get_flight_num() const : Obtient le numéro de vol de l'avion
+    float distance_to(const Point3D& p) const : Donne la distance en float de la position de l'avion au paramètre p.
+    void display() const override : Permet d'afficher graphiquement l'avion dans la fenêtre de la simulation
+    void move() override : Permet de déplacer l'avion
+
+
+
+La classe Aircraft_type représente un type d'avion, son rôle est de différencier les avions.
+La classe Airport représente l'aéroport, son rôle est d'accueillir des avions depuis le piste d'atterrissage.
+    Tower& get_tower() : Renvoie la tour de contrôle lié à l'aéroport.
+    void display() const override : Permet d'afficher l'aéroport
+    void move() override : Permet de lancer la méthode move() de chaque terminal
+
+La classe Airport_type représente le type d'aéroport, son rôle est de différencier les aéroport.
+La classe Point2D représente un point en 2 dimension, son rôle est faire toutes les calculs de la fenêtre
+La classe Point3D représente un point en 3 dimension.
+La classe Runway représente la piste d'atterrissage, son rôle est d'accueillir des avions.
+La classe Terminal représente le lieu d'entretien des avions, il regroupe notamment les fonctions liés à celle-ci comme le fait qu’un terminal est
+déjà utilisé, l’état du débarquement, d’assigner un terminal à un avion, de commencer ou de terminer le débarquement.
+    bool in_use() const : Renvoie si oui ou non le terminal est déjà en service avec un avion
+    bool is_servicing() const : Renvoie si oui ou non le terminal à fini son entretien avec l'avion
+    void assign_craft(const Aircraft& aircraft) : Permet d'assigner l'avion en paramètre dans la variable de la classe
+    void start_service(const Aircraft& aircraft) : Permet de lancer l'entretien de l'avion en paramètre et nous le signal
+    void finish_service() : Permet de signaler que l'avion a fini son entretien
+    void move() override : Fait progresser le temps de l'entretien
+
+La classe Tower permet de créer une tour qui se charge de l'entretien de l'avion
+    WaypointQueue get_instructions(Aircraft& aircraft) : Vérifie que l'avion est dans un terminal, sinon le conduit en lui donnant le chemin jusqu'au terminal qu'on a réservé pour lui.
+    void arrived_at_terminal(const Aircraft& aircraft) : Nous signal qu'un avion est arrivé dans un terminal et commence l'entretien.
+
+La classe tower_sim permet d'initialiser le simulateur en initialisant les tours et les avions.
+La classe waypoint permet d'indiquer si l'avio nest dans les airs ou sur terre et aussi la position de l'avion
+
+### FAIRE UN UML
+
+Le conteneur de la librairie standard qui a été choisi pour représenter le chemin est std::deque<Waypoint> pour le conteneur, on a choisi deque car pour une queue, on aurait pu utiliser std::queue, mais on a choisi std::deque parce qu'on veut rajouter des Waypoints à la fin et au debut de la queue.
+
+- Les classes Aircraft et Tower sont impliquées dans la génération du chemin d'un avion par les méthodes get_instructions et move.
+On utilise une la librairie <deque> pour ajouter des éléments assez rapidement et qu'on utilise deque pour pouvoir ajouter des éléments au début et à la fin de la queue
+
+C. Bidouillons
+
+1. Ils sont définis dans aircraft_types
+
+2. La variable qui contrôle le framerate est ticks_per_sec se situant dans le namespace GL. Lorsqu'on essaye de mettre le framerate à 0, le programme rencontre un problème, notamment à cause de la division par
+0, on décide donc de faire un boolean avec un if et lese s'il est vrai et modifier directement glutTimerFunc directement pour mettre en pause le programme.
+
+3. C'est SERVICE_CYCLES dans config.hpp
+
+5. DynamicObject est un set donc ce n'est pas nécessaire tandis que Displayable en le mettant static inline, il sera accessible et pourra être modifier où l'on veut.
+
+D. Théorie
+
+1. On utilise une map privé dans la classe tower pour qu'il s'occupe directement d'associer des avions et des terminaux, elle est private donc personne d'autre pourra l'utiliser.
+
+2. Pour éviter tout problème lié au référence. (A refaire)
