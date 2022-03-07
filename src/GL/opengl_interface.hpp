@@ -4,6 +4,7 @@
 #include "../geometry.hpp"
 #include "displayable.hpp"
 #include "dynamic_object.hpp"
+#include "../AircraftManager.h"
 
 #include <GL/freeglut.h>
 #include <algorithm>

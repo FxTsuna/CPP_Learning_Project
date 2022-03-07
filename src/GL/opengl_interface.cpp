@@ -72,7 +72,7 @@ void display(void)
 }
 
 void timer(const int step)
-{
+{/*
     for (auto item = move_queue.begin(); item != move_queue.end();)
     {
         auto it = *item;
@@ -85,11 +85,16 @@ void timer(const int step)
             item++;
         }
     }
-    glutPostRedisplay();
+    */
     if (!stop)
     {
-        glutTimerFunc(1000u / ticks_per_sec, timer, step + 1);
+        for (auto& item : move_queue)
+        {
+            item->move();
+        }
     }
+    glutPostRedisplay();
+    glutTimerFunc(1000u / ticks_per_sec, timer, step + 1);
 }
 
 void increase_framerate()

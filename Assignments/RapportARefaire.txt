@@ -68,3 +68,25 @@ D. Théorie
 1. On utilise une map privé dans la classe tower pour qu'il s'occupe directement d'associer des avions et des terminaux, elle est private donc personne d'autre pourra l'utiliser.
 
 2. Pour éviter tout problème lié au référence. (A refaire)
+
+
+-----------------------------------------------
+
+Task 1:
+
+Analyse de la gestion d'avion:
+
+Il n'y a pas moyen ? Sauf si on cherche dans la map de AircraftToTerminal puis dans chaque aircraft les numero de vol
+- (a confirmer)
+
+Objectif 1 - Référencement des avions
+
+A - Choisir l'architecture
+
+Faire un AircraftManager est plus propre et plus lisible (chercher d'autre raison)
+Trouver les desavantages a part que ca rajoute des classes
+
+Si on donne ce rôle à une classe existante (chercher les pb pour plus tard)
+
+
+
