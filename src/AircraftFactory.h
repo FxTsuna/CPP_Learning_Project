@@ -7,7 +7,7 @@ class AircraftFactory
 {
 private:
     const std::string airlines[8] = { "AF", "LH", "EY", "DL", "KL", "BA", "AY", "EY" };
-    AircraftType* aircraftType[NUM_AIRCRAFT_TYPES] {};
+    AircraftType* aircraft_types[NUM_AIRCRAFT_TYPES] {};
     std::unique_ptr<Aircraft> create_aircraft(const AircraftType& type, Airport* airport);
     std::set<std::string> setAircrafts;
     void init_aircraft_types();

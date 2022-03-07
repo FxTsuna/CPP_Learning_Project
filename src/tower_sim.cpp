@@ -12,8 +12,8 @@
 #include <ctime>
 
 using namespace std::string_literals;
-
-//const std::string airlines[8] = { "AF", "LH", "EY", "DL", "KL", "BA", "AY", "EY" };
+/*
+const std::string airlines[8] = { "AF", "LH", "EY", "DL", "KL", "BA", "AY", "EY" };
 
 TowerSimulation::TowerSimulation(int argc, char** argv) :
     help { (argc > 1) && (std::string { argv[1] } == "--help"s || std::string { argv[1] } == "-h"s) }
@@ -24,6 +24,7 @@ TowerSimulation::TowerSimulation(int argc, char** argv) :
 
     create_keystrokes();
 }
+*/
 
 TowerSimulation::~TowerSimulation()
 {
@@ -96,7 +97,7 @@ void TowerSimulation::init_airport()
     airport = new Airport { one_lane_airport, Point3D { 0, 0, 0 },
                             new img::Image { one_lane_airport_sprite_path.get_full_path() } };
 
-//    GL::display_queue.emplace_back(airport);
+    //    GL::display_queue.emplace_back(airport);
     GL::move_queue.emplace(airport);
 }
 

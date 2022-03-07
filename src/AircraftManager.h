@@ -3,6 +3,7 @@
 #include <vector>
 #include <memory>
 #include "aircraft.hpp"
+#include "AircraftFactory.h"
 
 class AircraftManager : public GL::DynamicObject
 {
