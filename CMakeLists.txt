@@ -4,31 +4,31 @@ project(tower_sim VERSION 0.1.0)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
 add_executable(tower
-	src/GL/displayable.hpp
-	src/GL/dynamic_object.hpp
-	src/GL/opengl_interface.cpp
-	src/GL/opengl_interface.hpp
-	src/GL/texture.hpp
-	src/img/image.cpp
-	src/img/image.hpp
-	src/img/media_path.hpp
-	src/img/stb_image.h
-    src/aircraft_types.hpp
-    src/aircraft.cpp
-    src/aircraft.hpp
-    src/airport_type.hpp
-	src/airport.hpp
-	src/config.hpp
-	src/geometry.hpp
-	src/runway.hpp
-	src/terminal.hpp
-	src/tower_sim.cpp
-	src/tower_sim.hpp
-	src/tower.cpp
-	src/tower.hpp
-	src/waypoint.hpp
-	src/main.cpp
-        src/AircraftManager.cpp src/AircraftManager.h src/AircraftFactory.cpp src/AircraftFactory.h)
+		src/GL/displayable.hpp
+		src/GL/dynamic_object.hpp
+		src/GL/opengl_interface.cpp
+		src/GL/opengl_interface.hpp
+		src/GL/texture.hpp
+		src/img/image.cpp
+		src/img/image.hpp
+		src/img/media_path.hpp
+		src/img/stb_image.h
+		src/aircraft_types.hpp
+		src/aircraft.cpp
+		src/aircraft.hpp
+		src/airport_type.hpp
+		src/airport.hpp
+		src/config.hpp
+		src/geometry.hpp
+		src/runway.hpp
+		src/terminal.hpp
+		src/tower_sim.cpp
+		src/tower_sim.hpp
+		src/tower.cpp
+		src/tower.hpp
+		src/waypoint.hpp
+		src/main.cpp
+		src/AircraftManager.cpp src/AircraftManager.h src/AircraftFactory.cpp src/AircraftFactory.h)
 
 ###################
 # Compile options #
@@ -37,9 +37,9 @@ add_executable(tower
 target_compile_features(tower PRIVATE cxx_std_17)
 
 if(MSVC)
-  target_compile_options(tower PRIVATE /W4 /WX)
+	target_compile_options(tower PRIVATE /W4 /WX)
 else()
-  target_compile_options(tower PRIVATE -Wall -Wextra -Werror -Wshadow)
+	target_compile_options(tower PRIVATE -Wall -Wextra -Werror -Wshadow)
 endif()
 
 
@@ -76,9 +76,9 @@ target_link_libraries(tower	PRIVATE ${OPENGL_LIBRARIES})
 ##########
 
 add_custom_command(TARGET tower POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${PROJECT_SOURCE_DIR}/media"
-        "$<TARGET_FILE_DIR:tower>/media")
+		COMMAND ${CMAKE_COMMAND} -E copy_directory
+		"${PROJECT_SOURCE_DIR}/media"
+		"$<TARGET_FILE_DIR:tower>/media")
 
 
 ########
@@ -86,8 +86,8 @@ add_custom_command(TARGET tower POST_BUILD
 ########
 
 if (WIN32)
-    add_custom_command(TARGET tower POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            $<TARGET_FILE:FreeGLUT::freeglut>
-            "$<TARGET_FILE_DIR:tower>/")
+	add_custom_command(TARGET tower POST_BUILD
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different
+			$<TARGET_FILE:FreeGLUT::freeglut>
+			"$<TARGET_FILE_DIR:tower>/")
 endif()
