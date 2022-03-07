@@ -7,10 +7,6 @@
 #include "img/image.hpp"
 #include "img/media_path.hpp"
 
-#include <cassert>
-#include <cstdlib>
-#include <ctime>
-
 using namespace std::string_literals;
 /*
 const std::string airlines[8] = { "AF", "LH", "EY", "DL", "KL", "BA", "AY", "EY" };
