@@ -73,6 +73,14 @@ void TowerSimulation::create_keystrokes()
     GL::keystrokes.emplace('i', []() { GL::increase_framerate();});
     GL::keystrokes.emplace('d', []() { GL::decrease_framerate();});
     GL::keystrokes.emplace('p', []() { GL::stop_framerate(); });
+    GL::keystrokes.emplace('0', [this]() {aircraft_manager.airline_counting(0);});
+    GL::keystrokes.emplace('1', [this]() {aircraft_manager.airline_counting(1);});
+    GL::keystrokes.emplace('2', [this]() {aircraft_manager.airline_counting(2);});
+    GL::keystrokes.emplace('3', [this]() {aircraft_manager.airline_counting(3);});
+    GL::keystrokes.emplace('4', [this]() {aircraft_manager.airline_counting(4);});
+    GL::keystrokes.emplace('5', [this]() {aircraft_manager.airline_counting(5);});
+    GL::keystrokes.emplace('6', [this]() {aircraft_manager.airline_counting(6);});
+    GL::keystrokes.emplace('7', [this]() {aircraft_manager.airline_counting(7);});
 }
 
 void TowerSimulation::display_help() const
@@ -80,9 +88,9 @@ void TowerSimulation::display_help() const
     std::cout << "This is an airport tower simulator" << std::endl
               << "the following keysstrokes have meaning:" << std::endl;
 
-    for (const auto& ks_pair : GL::keystrokes)
+    for (const auto& [first, second] : GL::keystrokes)
     {
-        std::cout << ks_pair.first << ' ';
+        std::cout << first << ' ';
     }
 
     std::cout << std::endl;
