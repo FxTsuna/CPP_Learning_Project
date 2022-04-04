@@ -73,14 +73,15 @@ void TowerSimulation::create_keystrokes()
     GL::keystrokes.emplace('i', []() { GL::increase_framerate();});
     GL::keystrokes.emplace('d', []() { GL::decrease_framerate();});
     GL::keystrokes.emplace('p', []() { GL::stop_framerate(); });
-    GL::keystrokes.emplace('0', [this]() {aircraft_manager.airline_counting(0);});
-    GL::keystrokes.emplace('1', [this]() {aircraft_manager.airline_counting(1);});
-    GL::keystrokes.emplace('2', [this]() {aircraft_manager.airline_counting(2);});
-    GL::keystrokes.emplace('3', [this]() {aircraft_manager.airline_counting(3);});
-    GL::keystrokes.emplace('4', [this]() {aircraft_manager.airline_counting(4);});
-    GL::keystrokes.emplace('5', [this]() {aircraft_manager.airline_counting(5);});
-    GL::keystrokes.emplace('6', [this]() {aircraft_manager.airline_counting(6);});
-    GL::keystrokes.emplace('7', [this]() {aircraft_manager.airline_counting(7);});
+    GL::keystrokes.emplace('m', [this]() { std::cout << aircraft_manager.get_compteur_crash() << std::endl; });
+    GL::keystrokes.emplace('0', [this]() { std::cout << "AF :" << aircraft_manager.airline_counting(aircraft_factory.get_airlines(0)) << std::endl;});
+    GL::keystrokes.emplace('1', [this]() { std::cout << "LH :" << aircraft_manager.airline_counting(aircraft_factory.get_airlines(1)) << std::endl;});
+    GL::keystrokes.emplace('2', [this]() { std::cout << "EY :" << aircraft_manager.airline_counting(aircraft_factory.get_airlines(2)) << std::endl;});
+    GL::keystrokes.emplace('3', [this]() { std::cout << "DL :" << aircraft_manager.airline_counting(aircraft_factory.get_airlines(3)) << std::endl;});
+    GL::keystrokes.emplace('4', [this]() { std::cout << "KL :" << aircraft_manager.airline_counting(aircraft_factory.get_airlines(4)) << std::endl;});
+    GL::keystrokes.emplace('5', [this]() { std::cout << "BA :" << aircraft_manager.airline_counting(aircraft_factory.get_airlines(5)) << std::endl;});
+    GL::keystrokes.emplace('6', [this]() { std::cout << "AY :" << aircraft_manager.airline_counting(aircraft_factory.get_airlines(6)) << std::endl;});
+    GL::keystrokes.emplace('7', [this]() { std::cout << "EY :" << aircraft_manager.airline_counting(aircraft_factory.get_airlines(7)) << std::endl;});
 }
 
 void TowerSimulation::display_help() const
@@ -99,7 +100,7 @@ void TowerSimulation::display_help() const
 void TowerSimulation::init_airport()
 {
     airport = new Airport { one_lane_airport, Point3D { 0, 0, 0 },
-                            new img::Image { one_lane_airport_sprite_path.get_full_path() } };
+                            new img::Image { one_lane_airport_sprite_path.get_full_path() }, aircraft_manager };
 
     //    GL::display_queue.emplace_back(airport);
     GL::move_queue.emplace(airport);
@@ -121,6 +122,6 @@ void TowerSimulation::launch()
     init_airport();
     //init_aircraft_types();
     init_aircraftManager();
-
+    assert(airport != nullptr);
     GL::loop();
 }

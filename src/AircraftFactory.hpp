@@ -1,7 +1,6 @@
 #pragma once
 
 #include "airport.hpp"
-#include "AircraftManager.h"
 
 class AircraftFactory
 {
@@ -20,5 +19,6 @@ public:
     std::unique_ptr<Aircraft> create_random_aircraft(Airport* airport);
     void add_flight_number(const std::string& str);
     std::set<std::string> getAircraftsSet() {return  setAircrafts;}
+    const std::string_view get_airlines(unsigned int x) const;
 };
 

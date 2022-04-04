@@ -15,13 +15,15 @@ class Aircraft : public GL::Displayable, public GL::DynamicObject
 private:
     const AircraftType& type;
     const std::string flight_number;
-    const unsigned int airline_indice;
     Point3D pos, speed; // note: the speed should always be normalized to length 'speed'
     WaypointQueue waypoints = {};
     Tower& control;
     bool landing_gear_deployed = false; // is the landing gear deployed?
     bool is_at_terminal        = false;
     bool landed_atleast_once   = false;
+    bool delete_ = false;
+    bool is_service_done = false;
+    float fuel = 150. + std::rand() % (int) (3000 - 150);
 
     // turn the aircraft to arrive at the next waypoint
     // try to facilitate reaching the waypoint after the next by facing the
@@ -39,20 +41,19 @@ private:
     void arrive_at_terminal();
     // deploy and retract landing gear depending on next waypoints
     void operate_landing_gear();
-    void add_waypoint(const Waypoint& wp, const bool front);
-    bool is_on_ground() const { return pos.z() < DISTANCE_THRESHOLD; }
+    template <const bool Front>
+    void add_waypoint(const Waypoint& wp);
     float max_speed() const { return is_on_ground() ? type.max_ground_speed : type.max_air_speed; }
 
     Aircraft(const Aircraft&) = delete;
     Aircraft& operator=(const Aircraft&) = delete;
 
 public:
-    Aircraft(const AircraftType& type_, const std::string_view& flight_number_, const unsigned int& airline_indice_, const Point3D& pos_,
+    Aircraft(const AircraftType& type_, const std::string_view& flight_number_, const Point3D& pos_,
              const Point3D& speed_, Tower& control_) :
         GL::Displayable { pos_.x() + pos_.y() },
         type { type_ },
         flight_number { flight_number_ },
-        airline_indice { airline_indice_ },
         pos { pos_ },
         speed { speed_ },
         control { control_ }
@@ -62,8 +63,13 @@ public:
 
     const std::string& get_flight_num() const { return flight_number; }
     float distance_to(const Point3D& p) const { return pos.distance_to(p); }
-    const unsigned int& get_indice() const { return airline_indice; }
-
+    float get_fuel() const {return fuel;}
+    float missing_fuel_to_max() const { return 3000 - fuel; }
+    bool is_on_ground() const { return pos.z() < DISTANCE_THRESHOLD; }
+    bool has_terminal() const;
+    bool is_low_on_fuel() const;
+    bool is_circling() const;
+    void refill(float& fuel_stock);
     void display() const override;
     void move() override;
     bool delete_aircraft() override;

@@ -77,9 +77,11 @@ void Aircraft::operate_landing_gear()
     }
 }
 
-void Aircraft::add_waypoint(const Waypoint& wp, const bool front)
+template <const bool Front>
+
+void Aircraft::add_waypoint(const Waypoint& wp)
 {
-    if (front)
+    if (Front)
     {
         waypoints.push_front(wp);
     }
@@ -91,9 +93,25 @@ void Aircraft::add_waypoint(const Waypoint& wp, const bool front)
 
 void Aircraft::move()
 {
+
+    if (is_circling() && !has_terminal())
+    {
+        WaypointQueue queue = control.reserve_terminal(*this);
+        if(!queue.empty())
+        {
+            waypoints = std::move(queue);
+        }
+    }
     if (waypoints.empty())
     {
-        waypoints = control.get_instructions(*this);
+        if (is_service_done)
+        {
+            delete_ = true;
+        }
+        for (const auto& wp: control.get_instructions(*this))
+        {
+            add_waypoint<false>(wp);
+        }
     }
 
     if (!is_at_terminal)
@@ -132,6 +150,12 @@ void Aircraft::move()
             {
                 pos.z() -= SINK_FACTOR * (SPEED_THRESHOLD - speed_len);
             }
+            fuel--;
+            if (fuel <= 0.)
+            {
+                delete_ = true;
+                throw AircraftCrash { flight_number + " crashed because he was out of fuel "};
+            }
         }
 
         // update the z-value of the displayable structure
@@ -141,7 +165,7 @@ void Aircraft::move()
 
 bool Aircraft::delete_aircraft()
 {
-    if (landed_atleast_once && !landing_gear_deployed)
+    if ((landed_atleast_once && !landing_gear_deployed) || (delete_))
     {
         return true;
     }
@@ -151,4 +175,31 @@ bool Aircraft::delete_aircraft()
 void Aircraft::display() const
 {
     type.texture.draw(project_2D(pos), { PLANE_TEXTURE_DIM, PLANE_TEXTURE_DIM }, get_speed_octant());
+}
+
+bool Aircraft::has_terminal() const
+{
+    return !waypoints.empty() && waypoints.back().is_at_terminal();
+}
+
+bool Aircraft::is_circling() const
+{
+    return !is_on_ground() && !is_service_done;
+}
+
+bool Aircraft::is_low_on_fuel() const
+{
+    return fuel < 200;
+}
+
+void Aircraft::refill(float& fuel_stock)
+{
+    assert(fuel_stock >= 0. && "The fuel can't be negative");
+    const auto refill = 3000 - fuel < fuel_stock ? 3000 - fuel : fuel_stock;
+    fuel += refill;
+    fuel_stock -= refill;
+    if (refill > 0.)
+    {
+        std::cout << flight_number << " refilled with " << refill << " Kerosene" << std::endl;
+    }
 }

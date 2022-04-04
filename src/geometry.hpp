@@ -6,6 +6,14 @@
 #include <cmath>
 #include <iostream>
 #include <numeric>
+/*
+template <const int size, typename  t>
+
+struct Point
+{
+
+};
+ */
 
 struct Point2D
 {

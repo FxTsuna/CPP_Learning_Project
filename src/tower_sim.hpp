@@ -1,7 +1,7 @@
 #pragma once
 
-#include "AircraftManager.h"
-#include "AircraftFactory.h"
+#include "AircraftManager.hpp"
+#include "AircraftFactory.hpp"
 
 class Airport;
 struct AircraftType;
