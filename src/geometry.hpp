@@ -6,159 +6,120 @@
 #include <cmath>
 #include <iostream>
 #include <numeric>
-/*
-template <const int size, typename  t>
+
+template <const int size, typename t>
 
 struct Point
 {
+    using type = Point<size, t>;
+    std::array<t, size> values {};
+    Point() {}
+    template <typename... Args>
+    Point(t x, t y) : values { x, y }
+    { static_assert(size == 2,"Not a Point2D"); }
+    Point(t x, t y, t z) : values { x, y, z }
+    { static_assert(size == 3,"Not a Point3D"); }
 
-};
- */
 
-struct Point2D
-{
-    float values[2] {};
-
-    Point2D() {}
-    Point2D(float x, float y) : values { x, y } {}
-
-    float& x() { return values[0]; }
-    float x() const { return values[0]; }
-
-    float& y() { return values[1]; }
-    float y() const { return values[1]; }
-
-    Point2D& operator+=(const Point2D& other)
+    float& x()
     {
-        x() += other.x();
-        y() += other.y();
+        static_assert(size >= 1);
+        return values[0];
+    }
+    float x() const
+    {
+        static_assert(size >= 1);
+        return values[0];
+    }
+
+    float& y()
+    {
+        static_assert(size >=2);
+        return values[1];
+    }
+    float y() const
+    {
+        static_assert(size >=2);
+        return values[1];
+    }
+
+    float& z()
+    {
+        static_assert(size >= 3);
+        return values[2];
+    }
+    float z() const
+    {
+        static_assert(size >= 3);
+        return values[2];
+    }
+
+    type& operator+=(const type& other)
+    {
+        std::transform(values.begin(),values.end(),other.values.begin(),values.begin(),std::plus<float> {});
         return *this;
     }
 
-    Point2D& operator*=(const Point2D& other)
+    type& operator-=(const type& other)
     {
-        x() *= other.x();
-        y() *= other.y();
-        return *this;
-    }
-
-    Point2D& operator*=(const float scalar)
-    {
-        x() *= scalar;
-        y() *= scalar;
-        return *this;
-    }
-
-    Point2D operator+(const Point2D& other) const
-    {
-        Point2D result = *this;
-        result += other;
-        return result;
-    }
-
-    Point2D operator*(const Point2D& other) const
-    {
-        Point2D result = *this;
-        result *= other;
-        return result;
-    }
-
-    Point2D operator*(const float scalar) const
-    {
-        Point2D result = *this;
-        result *= scalar;
-        return result;
-    }
-};
-
-struct Point3D
-{
-    //float values[3] {};
-    std::array<float, 3> values {};
-
-    Point3D() {}
-    Point3D(float x, float y, float z) : values { x, y, z } {}
-
-    float& x() { return values[0]; }
-    float x() const { return values[0]; }
-
-    float& y() { return values[1]; }
-    float y() const { return values[1]; }
-
-    float& z() { return values[2]; }
-    float z() const { return values[2]; }
-
-    Point3D& operator+=(const Point3D& other)
-    {
-        /*x() += other.x();
-        y() += other.y();
-        z() += other.z();*/
-        std::transform(other.values.begin(), other.values.end(), values.begin(), values.begin(), std::plus<float> {});
-        return *this;
-    }
-
-    Point3D& operator-=(const Point3D& other)
-    {
-        /*
-        x() -= other.x();
-        y() -= other.y();
-        z() -= other.z();*/
         std::transform(values.begin(),values.end(),other.values.begin(),values.begin(),std::minus<float> {});
         return *this;
     }
 
-    Point3D& operator*=(const float scalar)
+    type& operator*=(const float scalar)
     {
-        /*
-        x() *= scalar;
-        y() *= scalar;
-        z() *= scalar;*/
         std::transform(values.begin(),values.end(),values.begin(),[scalar](float c) { return c*scalar; });
         return *this;
     }
 
-    Point3D operator+(const Point3D& other) const
+    type operator+(const type& other) const
     {
-        Point3D result = *this;
+        type result = *this;
         result += other;
         return result;
     }
 
-    Point3D operator-(const Point3D& other) const
+    type operator-(const type& other) const
     {
-        Point3D result = *this;
+        type result = *this;
         result -= other;
         return result;
     }
 
-    Point3D operator*(const float scalar) const
+    type operator*(const t scalar) const
     {
-        Point3D result = *this;
+        type result = *this;
         result *= scalar;
         return result;
     }
 
-    Point3D operator-() const { return Point3D { -x(), -y(), -z() }; }
+    type operator-() const
+    {
+        return type { -x(), -y(), -z() };
+    }
 
-    float length() const { /*return std::sqrt(x() * x() + y() * y() + z() * z());*/
+    float length() const {
         return std::sqrt(std::accumulate(values.begin(),values.end(),0.0,[](float count,float a){ return count+(a*a);}));
     }
 
-    float distance_to(const Point3D& other) const { return (*this - other).length(); }
+    float distance_to(const type& other) const
+    {
+        return (*this - other).length();
+    }
 
-    Point3D& normalize(const float target_len = 1.0f)
+    type& normalize(const float target_len = 1.0f)
     {
         const float current_len = length();
         if (current_len == 0)
         {
-            throw std::logic_error("cannot normalize vector of length 0");
+            throw std::logic_error("Current lenght cannot be 0");
         }
 
         *this *= (target_len / current_len);
         return *this;
     }
 
-    Point3D& cap_length(const float max_len)
+    type& cap_length(const float max_len)
     {
         assert(max_len > 0);
 
@@ -170,7 +131,24 @@ struct Point3D
 
         return *this;
     }
+
+    type operator*(const type& other) const
+    {
+        type result = *this;
+        result *= other;
+        return result;
+    }
+
+    type& operator*=(const type& other)
+    {
+        x() *= other.x();
+        y() *= other.y();
+        return *this;
+    }
 };
+
+using Point3D = Point<3, float>;
+using Point2D = Point<2, float>;
 
 // our 3D-coordinate system will be tied to the airport: the runway is parallel to the x-axis, the z-axis
 // points towards the sky, and y is perpendicular to both thus,
