@@ -72,20 +72,7 @@ void display(void)
 }
 
 void timer(const int step)
-{/*
-    for (auto item = move_queue.begin(); item != move_queue.end();)
-    {
-        auto it = *item;
-        it->move();
-        if ((*item)->delete_aircraft())
-        {
-            item = move_queue.erase(item);
-            delete it;
-        } else {
-            item++;
-        }
-    }
-    */
+{
     if (!stop)
     {
         for (auto& item : move_queue)

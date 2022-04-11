@@ -2,7 +2,7 @@
 
 #include "airport.hpp"
 
-class AircraftFactory
+class aircraftFactory
 {
 private:
     const std::string airlines[8] = { "AF", "LH", "EY", "DL", "KL", "BA", "AY", "EY" };
@@ -12,7 +12,7 @@ private:
     void init_aircraft_types();
 
 public:
-    AircraftFactory()
+    aircraftFactory()
     {
         init_aircraft_types();
     }

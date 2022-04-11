@@ -9,7 +9,7 @@
 #include "runway.hpp"
 #include "terminal.hpp"
 #include "tower.hpp"
-#include "AircraftManager.hpp"
+#include "aircraftManager.hpp"
 
 #include <vector>
 
@@ -24,7 +24,7 @@ private:
     float fuel_stock = 0;
     float ordered_fuel = 0;
     double next_refill_time = 0;
-    const AircraftManager& manager;
+    const aircraftManager& manager;
 
     // reserve a terminal
     // if a terminal is free, return
@@ -56,7 +56,7 @@ private:
     Terminal& get_terminal(const size_t terminal_num) { return terminals.at(terminal_num); }
 
 public:
-    Airport(const AirportType& type_, const Point3D& pos_, const img::Image* image, const AircraftManager& aircraftManager, const float z_ = 1.0f) :
+    Airport(const AirportType& type_, const Point3D& pos_, const img::Image* image, const aircraftManager& aircraftManager, const float z_ = 1.0f) :
         GL::Displayable { z_ },
         type { type_ },
         pos { pos_ },

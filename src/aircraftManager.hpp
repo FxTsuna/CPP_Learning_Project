@@ -4,7 +4,7 @@
 #include <memory>
 #include "aircraft.hpp"
 
-class AircraftManager : public GL::DynamicObject
+class aircraftManager : public GL::DynamicObject
 {
 private:
     std::vector<std::unique_ptr<Aircraft>> aircrafts;

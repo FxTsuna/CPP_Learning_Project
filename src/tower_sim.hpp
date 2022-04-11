@@ -1,7 +1,7 @@
 #pragma once
 
-#include "AircraftManager.hpp"
-#include "AircraftFactory.hpp"
+#include "aircraftManager.hpp"
+#include "aircraftFactory.hpp"
 
 class Airport;
 struct AircraftType;
@@ -31,17 +31,14 @@ private:
     bool help        = false;
     Airport* airport = nullptr;
     ContextInitializer _contextInitializer;
-    AircraftManager aircraft_manager;
-    AircraftFactory aircraft_factory;
+    aircraftManager aircraft_manager;
+    aircraftFactory aircraft_factory;
 
     TowerSimulation(const TowerSimulation&) = delete;
     TowerSimulation& operator=(const TowerSimulation&) = delete;
 
-    //void create_aircraft(const AircraftType& type) const;
-    //void create_random_aircraft() const;
     void create_aircraft();
 
-    //void create_keystrokes() const;
     void create_keystrokes();
     void display_help() const;
 

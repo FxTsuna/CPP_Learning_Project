@@ -1,6 +1,6 @@
-#include "AircraftFactory.hpp"
+#include "aircraftFactory.hpp"
 
-std::unique_ptr<Aircraft> AircraftFactory::create_aircraft(const AircraftType& type, Airport* airport)
+std::unique_ptr<Aircraft> aircraftFactory::create_aircraft(const AircraftType& type, Airport* airport)
 {
     assert(airport); // make sure the airport is initialized before creating aircraft
     const std::string flight_number = airlines[std::rand() % 8] + std::to_string(1000 + (rand() % 9000));
@@ -11,26 +11,26 @@ std::unique_ptr<Aircraft> AircraftFactory::create_aircraft(const AircraftType& t
     return std::make_unique<Aircraft>(type, flight_number, start, direction, airport->get_tower());
 }
 
-std::unique_ptr<Aircraft> AircraftFactory::create_random_aircraft(Airport* airport)
+std::unique_ptr<Aircraft> aircraftFactory::create_random_aircraft(Airport* airport)
 {
     assert(airport);
     return create_aircraft(*(aircraft_types[rand() % NUM_AIRCRAFT_TYPES]), airport);
 }
 
-void AircraftFactory::init_aircraft_types()
+void aircraftFactory::init_aircraft_types()
 {
     aircraft_types[0] = new AircraftType { .02f, .05f, .02f, MediaPath { "l1011_48px.png" } };
     aircraft_types[1] = new AircraftType { .02f, .05f, .02f, MediaPath { "b707_jat.png" } };
     aircraft_types[2] = new AircraftType { .04f, .1f, .04f, MediaPath { "concorde_af.png" } };
 }
 
-void AircraftFactory::add_flight_number(const std::string& str)
+void aircraftFactory::add_flight_number(const std::string& str)
 {
     assert(!str.empty());
     setAircrafts.emplace(str);
 }
 
-const std::string_view  AircraftFactory::get_airlines(unsigned int x) const
+const std::string_view aircraftFactory::get_airlines(unsigned int x) const
 {
     assert((x > 0 && x < 8) && "We have only 8 types");
     return airlines[x];
