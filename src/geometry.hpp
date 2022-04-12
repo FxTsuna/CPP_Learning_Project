@@ -99,7 +99,7 @@ struct Point
     }
 
     float length() const {
-        return std::sqrt(std::accumulate(values.begin(),values.end(),0.0,[](float count,float a){ return count+(a*a);}));
+        return std::sqrt(std::inner_product(values.begin(), values.end(), values.begin(), float { 0 }));
     }
 
     float distance_to(const type& other) const
