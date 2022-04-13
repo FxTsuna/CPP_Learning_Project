@@ -14,7 +14,6 @@ struct Point
     using type = Point<size, t>;
     std::array<t, size> values {};
     Point() {}
-    template <typename... Args>
     Point(t x, t y) : values { x, y }
     { static_assert(size == 2,"Not a Point2D"); }
     Point(t x, t y, t z) : values { x, y, z }
