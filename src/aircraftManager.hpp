@@ -14,7 +14,7 @@ public:
     void move() override;
     void add_aircraft(std::unique_ptr<Aircraft> aircraft);
     int airline_counting(const std::string_view& x);
-    float get_required_fuel() const;
-    int get_compteur_crash() { return compteurCrash; }
+    unsigned int get_required_fuel() const;
+    int get_compteur_crash() const { return compteurCrash; }
 };
 

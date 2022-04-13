@@ -39,9 +39,8 @@ public:
         }
     }
 
-    void move(float& fuel_stock)
+    void move(unsigned int& fuel_stock)
     {
-        assert(fuel_stock >= 0. && "fuel stock can't be negative");
         if (in_use() && is_servicing())
         {
             ++service_progress;
@@ -49,9 +48,8 @@ public:
         }
     }
 
-    void refill_aircraft_if_needed(float& fuel_stock) const
+    void refill_aircraft_if_needed(unsigned int& fuel_stock) const
     {
-        assert(fuel_stock >= 0.);
         if (current_aircraft->is_low_on_fuel() && current_aircraft->is_on_ground())
         {
             current_aircraft->refill(fuel_stock);

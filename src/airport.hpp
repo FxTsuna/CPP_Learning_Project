@@ -21,9 +21,9 @@ private:
     const GL::Texture2D texture;
     std::vector<Terminal> terminals;
     Tower tower;
-    float fuel_stock = 0;
-    float ordered_fuel = 0;
-    double next_refill_time = 0;
+    unsigned int fuel_stock = 0;
+    unsigned int ordered_fuel = 0;
+    unsigned int next_refill_time = 0;
     const aircraftManager& manager;
 
     // reserve a terminal
@@ -72,24 +72,20 @@ public:
 
     void move() override
     {
-        if (next_refill_time <= 0.)
+        if (next_refill_time <= 0)
         {
             fuel_stock += ordered_fuel;
             const auto required = manager.get_required_fuel();
-            if (fuel_stock >= required + 1000.)
-            {
-                ordered_fuel = 0.;
-            } else {
-                ordered_fuel = std::min(required + 1000., 5000.);
-                std::cout << "fuel stock : " << fuel_stock << " ordered fuel : " << ordered_fuel << std::endl;
-            }
-            next_refill_time = 100.;
+            ordered_fuel = (required < 5000) ? required : 5000;
+            std::cout << "fuel stock : " << fuel_stock << " ordered fuel : " << ordered_fuel << std::endl;
+            next_refill_time = 100;
+        } else {
+            next_refill_time--;
         }
         for (auto& t : terminals)
         {
             t.move(fuel_stock);
         }
-        next_refill_time--;
     }
 
     friend class Tower;

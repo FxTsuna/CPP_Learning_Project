@@ -38,15 +38,16 @@ int aircraftManager::airline_counting(const std::string_view& x) {
                          { return x == aircraft_it->get_flight_num().substr(0, 2); });
 }
 
-float aircraftManager::get_required_fuel() const
+unsigned int aircraftManager::get_required_fuel() const
 {
-    return std::accumulate(aircrafts.begin(), aircrafts.end(), 0., [](float accumulate, const std::unique_ptr<Aircraft>& aircraft)
-                           {
-                               assert(aircraft != nullptr);
-                               if (aircraft->is_on_ground() && aircraft->is_low_on_fuel())
-                               {
-                                   return accumulate + aircraft->missing_fuel_to_max();
-                               }
-                               return accumulate;
-                           });
+    unsigned int acc = std::accumulate(aircrafts.begin(), aircrafts.end(), 0,[](unsigned int accumul, const std::unique_ptr<Aircraft>& aircraft)
+                                       {
+                                           assert(aircraft != nullptr);
+                                           if (aircraft->is_on_ground() && aircraft->is_low_on_fuel())
+                                           {
+                                               return accumul + (3000 - aircraft->get_fuel());
+                                           }
+                                           return accumul;
+                                       });
+    return acc;
 }

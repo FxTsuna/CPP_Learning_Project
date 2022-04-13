@@ -93,20 +93,12 @@ void Aircraft::add_waypoint(const Waypoint& wp)
 
 void Aircraft::move()
 {
-
-    if (is_circling() && !has_terminal())
-    {
-        WaypointQueue queue = control.reserve_terminal(*this);
-        if(!queue.empty())
-        {
-            waypoints = std::move(queue);
-        }
-    }
     if (waypoints.empty())
     {
         if (is_service_done)
         {
             delete_ = true;
+            return;
         }
         for (const auto& wp: control.get_instructions(*this))
         {
@@ -120,6 +112,15 @@ void Aircraft::move()
         // move in the direction of the current speed
         pos += speed;
 
+        if (is_circling() && !is_service_done)
+        {
+            if (fuel > 100)
+            {
+                auto path = control.reserve_terminal(*this);
+                if (!path.empty())
+                    waypoints = std::move(path);
+            }
+        }
         // if we are close to our next waypoint, stike if off the list
         if (!waypoints.empty() && distance_to(waypoints.front()) < DISTANCE_THRESHOLD)
         {
@@ -151,7 +152,7 @@ void Aircraft::move()
                 pos.z() -= SINK_FACTOR * (SPEED_THRESHOLD - speed_len);
             }
             fuel--;
-            if (fuel <= 0.)
+            if (fuel <= 0)
             {
                 delete_ = true;
                 throw AircraftCrash { flight_number + " crashed because he was out of fuel "};
@@ -179,12 +180,12 @@ void Aircraft::display() const
 
 bool Aircraft::has_terminal() const
 {
-    return !waypoints.empty() && waypoints.back().is_at_terminal();
+    return control.get_reserved_terminal().find(this) != control.get_reserved_terminal().end();
 }
 
 bool Aircraft::is_circling() const
 {
-    return !is_on_ground() && !is_service_done;
+    return !has_terminal();
 }
 
 bool Aircraft::is_low_on_fuel() const
@@ -192,13 +193,18 @@ bool Aircraft::is_low_on_fuel() const
     return fuel < 200;
 }
 
-void Aircraft::refill(float& fuel_stock)
+void Aircraft::refill(unsigned int& fuel_stock)
 {
-    assert(fuel_stock >= 0. && "The fuel can't be negative");
-    const auto refill = 3000 - fuel < fuel_stock ? 3000 - fuel : fuel_stock;
-    fuel += refill;
-    fuel_stock -= refill;
-    if (refill > 0.)
+    const unsigned int refill = 3000 - fuel;
+    if (refill >= fuel_stock)
+    {
+        fuel += fuel_stock;
+        fuel_stock = 0;
+    } else {
+        fuel_stock -= refill;
+        fuel += refill;
+    }
+    if (refill > 0)
     {
         std::cout << flight_number << " refilled with " << refill << " Kerosene" << std::endl;
     }

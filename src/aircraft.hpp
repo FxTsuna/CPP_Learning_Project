@@ -23,7 +23,7 @@ private:
     bool landed_atleast_once   = false;
     bool delete_ = false;
     bool is_service_done = false;
-    float fuel = 150. + std::rand() % (int) (3000 - 150);
+    unsigned int fuel = 150 + std::rand() % (3000 - 150);
 
     // turn the aircraft to arrive at the next waypoint
     // try to facilitate reaching the waypoint after the next by facing the
@@ -63,13 +63,12 @@ public:
 
     const std::string& get_flight_num() const { return flight_number; }
     float distance_to(const Point3D& p) const { return pos.distance_to(p); }
-    float get_fuel() const {return fuel;}
-    float missing_fuel_to_max() const { return 3000 - fuel; }
+    unsigned int get_fuel() const {return fuel;}
     bool is_on_ground() const { return pos.z() < DISTANCE_THRESHOLD; }
     bool has_terminal() const;
     bool is_low_on_fuel() const;
     bool is_circling() const;
-    void refill(float& fuel_stock);
+    void refill(unsigned int& fuel_stock);
     void display() const override;
     void move() override;
     bool delete_aircraft() override;

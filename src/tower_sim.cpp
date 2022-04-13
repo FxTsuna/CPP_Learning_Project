@@ -38,7 +38,7 @@ void TowerSimulation::create_keystrokes()
     GL::keystrokes.emplace('i', []() { GL::increase_framerate();});
     GL::keystrokes.emplace('d', []() { GL::decrease_framerate();});
     GL::keystrokes.emplace('p', []() { GL::stop_framerate(); });
-    GL::keystrokes.emplace('m', [this]() { std::cout << aircraft_manager.get_compteur_crash() << std::endl; });
+    GL::keystrokes.emplace('m', [this]() { std::cout << "Nombre de crash :" << aircraft_manager.get_compteur_crash() << std::endl; });
     GL::keystrokes.emplace('0', [this]() { std::cout << "AF :" << aircraft_manager.airline_counting(aircraft_factory.get_airlines(0)) << std::endl;});
     GL::keystrokes.emplace('1', [this]() { std::cout << "LH :" << aircraft_manager.airline_counting(aircraft_factory.get_airlines(1)) << std::endl;});
     GL::keystrokes.emplace('2', [this]() { std::cout << "EY :" << aircraft_manager.airline_counting(aircraft_factory.get_airlines(2)) << std::endl;});
