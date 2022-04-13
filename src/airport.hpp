@@ -72,7 +72,7 @@ public:
 
     void move() override
     {
-        if (next_refill_time <= 0)
+        if (next_refill_time == 0)
         {
             fuel_stock += ordered_fuel;
             const auto required = manager.get_required_fuel();
