@@ -12,9 +12,6 @@ template <const int size, typename t>
 struct Point
 {
     std::array<t, size> values {};
-    Point() {}
-
-
     template <typename... Args>
     Point(t first, Args&&... args) : values {first, std::forward<Args>(args)...}
     { static_assert(sizeof ...(args) + 1 == size, "Not corresponding arguments");}
